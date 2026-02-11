@@ -1,0 +1,39 @@
+# Docker Compose for QKD-Lab
+# ==========================
+# Run: docker-compose up
+# Access: http://localhost:3000 (frontend) + http://localhost:8000 (backend API)
+
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: qkd-lab-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - QKD_HOST=0.0.0.0
+      - QKD_PORT=8000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: qkd-lab-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped

@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  /* ═══════════════════════════════════════════════════════════════════════════
+     WARM LIGHT MODE - Cream, amber, and soft earth tones
+     ═══════════════════════════════════════════════════════════════════════════ */
+  :root {
+    /* Warm cream/ivory background */
+    --background: 40 40% 97%;
+    --foreground: 25 30% 15%;
+    
+    /* Warm off-white cards with subtle amber tint */
+    --card: 38 45% 96%;
+    --card-foreground: 25 30% 15%;
+    
+    /* Popover with warm tones */
+    --popover: 40 50% 98%;
+    --popover-foreground: 25 30% 15%;
+    
+    /* Deep amber/brown primary */
+    --primary: 25 60% 35%;
+    --primary-foreground: 40 40% 97%;
+    
+    /* Warm beige secondary */
+    --secondary: 35 30% 90%;
+    --secondary-foreground: 25 40% 20%;
+    
+    /* Warm muted tones */
+    --muted: 35 25% 91%;
+    --muted-foreground: 25 15% 45%;
+    
+    /* Warm sand accent */
+    --accent: 35 35% 88%;
+    --accent-foreground: 25 40% 18%;
+    
+    /* Warm coral destructive */
+    --destructive: 10 70% 50%;
+    --destructive-foreground: 40 40% 98%;
+    
+    /* Warm borders and inputs */
+    --border: 35 25% 85%;
+    --input: 35 30% 88%;
+    --ring: 25 50% 40%;
+    
+    /* Warm chart colors */
+    --chart-1: 25 75% 50%;
+    --chart-2: 160 50% 40%;
+    --chart-3: 200 45% 45%;
+    --chart-4: 45 70% 55%;
+    --chart-5: 15 80% 55%;
+    
+    --radius: 0.5rem;
+
+    /* Custom warm palette for UI elements */
+    --warm-50: 40 50% 98%;
+    --warm-100: 38 45% 95%;
+    --warm-200: 35 35% 88%;
+    --warm-300: 33 30% 78%;
+    --warm-400: 30 25% 60%;
+    --warm-500: 28 30% 45%;
+    --warm-600: 25 35% 35%;
+    --warm-700: 22 40% 25%;
+    --warm-800: 20 45% 18%;
+    --warm-900: 18 50% 12%;
+    
+    /* Sky accent for QKD theme (warm version) */
+    --sky-warm: 200 65% 50%;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     DARK MODE - Pitch black theme (original)
+     ═══════════════════════════════════════════════════════════════════════════ */
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
+    
+    --card: 0 0% 3%;
+    --card-foreground: 0 0% 98%;
+    
+    --popover: 0 0% 3%;
+    --popover-foreground: 0 0% 98%;
+    
+    --primary: 199 89% 48%;
+    --primary-foreground: 0 0% 0%;
+    
+    --secondary: 0 0% 8%;
+    --secondary-foreground: 0 0% 98%;
+    
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 60%;
+    
+    --accent: 0 0% 10%;
+    --accent-foreground: 0 0% 98%;
+    
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 0 0% 12%;
+    --input: 0 0% 12%;
+    --ring: 199 89% 48%;
+    
+    --chart-1: 199 89% 48%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+
+    /* Dark mode palette */
+    --warm-50: 0 0% 12%;
+    --warm-100: 0 0% 10%;
+    --warm-200: 0 0% 8%;
+    --warm-300: 0 0% 15%;
+    --warm-400: 0 0% 30%;
+    --warm-500: 0 0% 45%;
+    --warm-600: 0 0% 60%;
+    --warm-700: 0 0% 75%;
+    --warm-800: 0 0% 88%;
+    --warm-900: 0 0% 95%;
+    
+    --sky-warm: 199 89% 48%;
+  }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

@@ -1,0 +1,11 @@
+# QKD-Lab Backend Dependencies
+# Pinned versions for reproducible builds
+
+fastapi==0.128.7
+uvicorn[standard]==0.40.0
+numpy==2.4.2
+pydantic==2.12.5
+
+# Optional: for development
+# pytest>=8.0.0
+# httpx>=0.27.0

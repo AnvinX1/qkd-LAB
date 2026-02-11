@@ -77,9 +77,6 @@ jobs:
           - os: windows-latest
             target: x86_64-pc-windows-msvc
             artifact: qkd-backend.exe
-          - os: macos-13
-            target: x86_64-apple-darwin
-            artifact: qkd-backend
           - os: macos-latest
             target: aarch64-apple-darwin
             artifact: qkd-backend
@@ -136,9 +133,6 @@ jobs:
           - os: windows-latest
             target: x86_64-pc-windows-msvc
             rust-target: x86_64-pc-windows-msvc
-          - os: macos-13
-            target: x86_64-apple-darwin
-            rust-target: x86_64-apple-darwin
           - os: macos-latest
             target: aarch64-apple-darwin
             rust-target: aarch64-apple-darwin

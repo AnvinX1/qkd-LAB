@@ -34,40 +34,77 @@ function setConnectionStatus(status: ConnectionStatus) {
   connectionListeners.forEach((cb) => cb(status));
 }
 
-// ── Health check with auto-discovery ────────────────────────────────────────
+// ── Health check with auto-discovery and retry logic ─────────────────────────
 
-export async function checkBackendHealth(): Promise<boolean> {
+const HEALTH_CHECK_TIMEOUT = 60000; // 60 seconds total timeout
+const HEALTH_CHECK_INTERVAL = 500; // Check every 500ms
+const MAX_RETRIES = 120; // 120 * 500ms = 60 seconds
+
+export async function checkBackendHealth(
+  maxRetries: number = MAX_RETRIES,
+  intervalMs: number = HEALTH_CHECK_INTERVAL
+): Promise<boolean> {
   setConnectionStatus("checking");
-  
-  for (const url of API_URLS) {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3000);
-      
-      const res = await fetch(`${url}/health`, {
-        method: "GET",
-        signal: controller.signal,
-      });
-      
-      clearTimeout(timeoutId);
-      
-      if (res.ok) {
-        API_BASE = url; // Use this working URL
-        setConnectionStatus("connected");
-        return true;
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    for (const url of API_URLS) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000);
+
+        const res = await fetch(`${url}/health`, {
+          method: "GET",
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (res.ok) {
+          API_BASE = url; // Use this working URL
+          setConnectionStatus("connected");
+          console.log(`✓ Backend health check passed on ${url}`);
+          return true;
+        }
+      } catch {
+        // Try next URL
       }
-    } catch {
-      // Try next URL
+    }
+
+    // If this isn't the last attempt, wait before retrying
+    if (attempt < maxRetries - 1) {
+      await new Promise((resolve) => setTimeout(resolve, intervalMs));
     }
   }
-  
+
   setConnectionStatus("disconnected");
+  console.warn(
+    `⚠ Backend health check failed after ${maxRetries} retries (${(maxRetries * intervalMs) / 1000}s)`
+  );
   return false;
 }
 
-// Auto-check on module load
+// Auto-check on module load with retry
 if (typeof window !== "undefined") {
-  checkBackendHealth();
+  // Start health check with timeout, but don't block page load
+  const healthCheckPromise = checkBackendHealth(3, 500); // Quick 3 attempts for initial check
+
+  // Also schedule a background retry in case backend is slow to start
+  healthCheckPromise.then((connected) => {
+    if (!connected) {
+      console.log("Initial health check failed, scheduling background retry...");
+      // Retry in background every 5 seconds for up to 2 minutes
+      const retryInterval = setInterval(async () => {
+        const connected = await checkBackendHealth(1, 0);
+        if (connected) {
+          clearInterval(retryInterval);
+          console.log("✓ Background retry successful");
+        }
+      }, 5000);
+
+      // Clear interval after 2 minutes
+      setTimeout(() => clearInterval(retryInterval), 120000);
+    }
+  });
 }
 
 // ── Request / Response types ────────────────────────────────────────────────
